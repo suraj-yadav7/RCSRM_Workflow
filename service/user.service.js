@@ -1,15 +1,20 @@
 import UserRespository from "../repositories/user.repository.js";
+import bcrypt from "bcrypt"
 
 /** User Services CRUD */
 const UserService = {
   createUser : async(payload) =>{
-    const {email} = payload
+    const {email, password, ...restPayload} = payload
     const exist = await UserRespository.findByEmail(email)
     if(exist){
       return {status:400, success:false, message:"User Already Exist."}
     };
+    console.log("pass: ", password)
 
-    const newUser = await UserRespository.create(payload)
+    const salt = await bcrypt.genSalt(11)
+    const hashPassword = await bcrypt.hash(password, salt)
+    console.log("create payload: ",{email, password:hashPassword, restPayload}  )
+    const newUser = await UserRespository.create({email, password:hashPassword, ...restPayload})
     return {status:201, success:true, message:"User Created Successfully.", data:newUser}
   },
 

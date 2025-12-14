@@ -10,9 +10,9 @@ const UserRespository = {
 
   create       :  (data)  =>  User.create(data),
 
-  delete       :  (id)    =>  User.findByIdAndDelete(id),
+  update       :  (id, data) => User.findByIdAndUpdate(id, data, {new:true}),
 
-  update       :  (id, data) => User.findByIdAndUpdate(id, data, {new:true})
+  delete       :  (id)    =>  User.findByIdAndDelete(id)
 };
 
 export default UserRespository;
